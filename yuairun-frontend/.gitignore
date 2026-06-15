@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.taro-cache/
+.swc/
+err.txt
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

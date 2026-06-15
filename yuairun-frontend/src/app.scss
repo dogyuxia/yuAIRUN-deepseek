@@ -1,0 +1,66 @@
+/** 全局样式 - 淡雅阿衰风 */
+
+/** 设计变量 */
+page {
+  --color-primary: #C97B6B;
+  --color-secondary: #6E9B92;
+  --color-warm: #B58A7A;
+  --color-bg: #F7F3F0;
+  --color-card-bg: #FFFFFF;
+  --color-text: #3D2C2E;
+  --color-text-secondary: #A0887E;
+  --color-text-light: #C4B5AB;
+  --color-border: #EDE4DE;
+  --color-correct-bg: #F0F7F5;
+  --color-correct-border: #7DB1A8;
+  --color-wrong-bg: #FDF2EF;
+  --color-wrong-border: #D4856C;
+  --color-tag-red-bg: #F6E7E4;
+  --color-tag-teal-bg: #E6F0EE;
+  --color-tag-warm-bg: #F5EDE8;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.04);
+  --font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans SC', sans-serif;
+  --font-size-xs: 26px;
+  --font-size-sm: 30px;
+  --font-size-md: 34px;
+  --font-size-lg: 38px;
+  --font-size-xl: 52px;
+}
+
+page {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  box-sizing: border-box;
+}
+
+view,
+text,
+button,
+input,
+textarea {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: var(--font-family);
+}
+
+/** 移除按钮默认样式 */
+button[type="default"] {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: inherit;
+}
+
+button[type="default"]::after {
+  border: none;
+}

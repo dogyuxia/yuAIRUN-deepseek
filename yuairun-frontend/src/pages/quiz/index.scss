@@ -1,0 +1,45 @@
+.quiz-page {
+  min-height: 100vh;
+  padding: 100px 24px 30px;
+  background: #F7F3F0;
+}
+
+.gradient-bar {
+  height: 8px;
+  background: linear-gradient(90deg, #C97B6B, #A7C7C0, #D4A89A);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.next-btn {
+  margin-top: 16px;
+}
+
+.quiz-xp-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+
+  .xp-stars {
+    display: flex;
+    gap: 4px;
+
+    .star {
+      font-size: 36px;
+
+      &.filled {
+        opacity: 1;
+      }
+
+      &.empty {
+        opacity: 0.2;
+      }
+    }
+  }
+
+  .xp-text {
+    font-size: 26px;
+    color: #A0887E;
+  }
+}

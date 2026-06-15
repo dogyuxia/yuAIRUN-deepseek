@@ -1,0 +1,83 @@
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-card {
+  background: #fff;
+  border-radius: 28px;
+  padding: 48px 40px;
+  width: 600px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+}
+
+.loading-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.loading-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #3D2C2E;
+  display: block;
+  margin-bottom: 24px;
+}
+
+.loading-bar {
+  height: 12px;
+  background: #EDE4DE;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 16px;
+
+  .loading-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #C97B6B, #D4A89A);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+  }
+}
+
+.loading-stage {
+  font-size: 24px;
+  color: #A0887E;
+  margin-bottom: 12px;
+}
+
+.loading-progress-text {
+  font-size: 22px;
+  color: #6E9B92;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.loading-fun-fact {
+  font-size: 22px;
+  color: #C4B5AB;
+  padding: 16px;
+  background: #FBF9F7;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.loading-cancel {
+  display: inline-block;
+  padding: 16px 48px;
+  background: #F5EDE8;
+  border: none;
+  border-radius: 20px;
+  font-size: 24px;
+  color: #A0887E;
+  font-weight: 500;
+}

@@ -1,0 +1,150 @@
+.report-page {
+  min-height: 100vh;
+  padding: 100px 24px 30px;
+  background: #F7F3F0;
+}
+
+.gradient-bar {
+  height: 8px;
+  background: linear-gradient(90deg, #C97B6B, #A7C7C0, #D4A89A);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+/* Loading/Error */
+.report-loading,
+.report-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+
+  .loading-icon,
+  .error-icon {
+    font-size: 72px;
+  }
+
+  .loading-text,
+  .error-text {
+    font-size: 30px;
+    color: #A0887E;
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 24px;
+  }
+}
+
+/* 头部 */
+.report-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+
+  .rh-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #C97B6B;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    flex-shrink: 0;
+  }
+
+  .rh-text {
+    flex: 1;
+
+    .rh-name {
+      font-size: 32px;
+      font-weight: 700;
+      display: block;
+    }
+
+    .rh-sub {
+      font-size: 26px;
+      color: #A0887E;
+      display: block;
+    }
+  }
+
+  .rh-icon {
+    font-size: 48px;
+  }
+}
+
+/* 区块 */
+.report-section {
+  margin-bottom: 16px;
+
+  .rs-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #3D2C2E;
+    display: block;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rs-body {
+    font-size: 28px;
+    line-height: 1.8;
+    color: #5A4547;
+    background: #FBF9F7;
+    padding: 20px 24px;
+    border-radius: 20px;
+    border: 2px solid #EDE4DE;
+  }
+
+  .rs-body.detailed {
+    padding: 16px 20px;
+  }
+
+  .strong-tag {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 16px;
+    font-size: 26px;
+    background: #F0F7F5;
+    color: #6E9B92;
+    margin: 4px 6px;
+  }
+
+  .weak-tag {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 16px;
+    font-size: 26px;
+    background: #FDF2EF;
+    color: #D4856C;
+    margin: 4px 6px;
+  }
+
+  .rec-tag {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 16px;
+    font-size: 26px;
+    background: #F5EDE8;
+    color: #B58A7A;
+    margin: 4px 6px;
+  }
+
+  .suggestion-line {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 28px;
+    color: #5A4547;
+    line-height: 1.7;
+  }
+}
+
+.share-btn {
+  margin-top: 16px;
+}

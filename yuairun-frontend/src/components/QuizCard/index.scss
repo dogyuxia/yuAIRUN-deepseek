@@ -1,0 +1,64 @@
+.quiz-card {
+  margin-bottom: 16px;
+}
+
+.quiz-question-box {
+  background: #FBF9F7;
+  border-radius: 28px;
+  padding: 28px;
+  margin-bottom: 20px;
+  border: 2px solid #EDE4DE;
+
+  .q-tag {
+    display: inline-block;
+    font-size: 24px;
+    background: #E6F0EE;
+    color: #6E9B92;
+    padding: 6px 24px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+  }
+
+  .q-text {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.7;
+    color: #3D2C2E;
+    display: block;
+  }
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quiz-feedback {
+  margin-top: 20px;
+  padding: 24px 28px;
+  border-radius: 24px;
+  font-size: 28px;
+  line-height: 1.8;
+
+  &.correct {
+    background: #F0F7F5;
+    border-left: 6px solid #7DB1A8;
+  }
+
+  &.wrong {
+    background: #FDF2EF;
+    border-left: 6px solid #D4856C;
+  }
+
+  .fb-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 30px;
+  }
+
+  .fb-body {
+    color: #5A4547;
+    font-size: 24px;
+  }
+}

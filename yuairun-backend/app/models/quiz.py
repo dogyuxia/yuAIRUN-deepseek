@@ -1,0 +1,61 @@
+"""题目相关的 Pydantic 数据模型"""
+
+from pydantic import BaseModel, Field, ConfigDict
+from typing import Literal
+
+
+class QuizOption(BaseModel):
+    """选项"""
+    label: str = Field(description="选项标签，如 A/B/C/D")
+    content: str = Field(description="选项内容")
+
+
+class QuizQuestion(BaseModel):
+    """单道题目"""
+    model_config = ConfigDict(populate_by_name=True)
+
+    id: str = Field(description="题目唯一ID")
+    type: Literal["single", "multiple", "judge"] = Field(description="题目类型: single=单选, multiple=多选, judge=判断")
+    question: str = Field(description="题目内容")
+    options: list[QuizOption] = Field(description="选项列表")
+    answer: str | list[str] = Field(description="正确答案，单选为字符串如'A'，多选为列表如['A','C']")
+    explanation: str = Field(description="题目解析")
+    difficulty: Literal["easy", "medium", "hard"] = Field(description="难度")
+    knowledgePoint: str = Field(validation_alias="knowledgePoint", description="知识点标签")
+
+
+class QuizMetadata(BaseModel):
+    """题目元数据"""
+    model_config = ConfigDict(populate_by_name=True)
+
+    subject: str = Field(description="学科")
+    topic: str = Field(description="知识点")
+    generatedAt: str = Field(validation_alias="generatedAt", description="生成时间")
+    model: str = Field(description="使用的模型")
+
+
+class QuizResponse(BaseModel):
+    """AI 生成的题目响应（绑定给结构化输出的模型）"""
+    model_config = ConfigDict(populate_by_name=True)
+
+    questions: list[QuizQuestion] = Field(description="生成的题目列表")
+    metadata: QuizMetadata = Field(description="元数据")
+
+
+# ---- API 请求/响应 ----
+
+class GenerateQuizRequest(BaseModel):
+    """生成题目请求"""
+    subject: str = Field(description="学科类别", examples=["计算机网络"])
+    topic: str = Field(description="知识点/内容描述", examples=["TCP三次握手的过程和原理"])
+    count: int = Field(default=5, ge=1, le=20, description="题目数量")
+    difficulty: Literal["easy", "medium", "hard", "mixed"] = Field(default="medium", description="难度")
+    type: Literal["single", "multiple", "judge", "mixed"] = Field(default="single", description="题目类型")
+
+
+class GenerateQuizResponse(BaseModel):
+    """生成题目响应"""
+    success: bool = Field(default=True)
+    data: QuizResponse | None = None
+    error: str | None = None
+    detail: str | None = None

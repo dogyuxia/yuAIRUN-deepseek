@@ -1,0 +1,31 @@
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  .p-icon {
+    font-size: 28px;
+  }
+
+  .p-bar {
+    flex: 1;
+    height: 12px;
+    background: #EDE4DE;
+    border-radius: 6px;
+    overflow: hidden;
+
+    .p-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #C97B6B, #D4A89A);
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+  }
+
+  .p-text {
+    font-size: 22px;
+    color: #A0887E;
+    white-space: nowrap;
+  }
+}

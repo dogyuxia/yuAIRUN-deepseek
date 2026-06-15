@@ -1,0 +1,148 @@
+.share-page {
+  min-height: 100vh;
+  padding: 100px 24px 30px;
+  background: #F7F3F0;
+}
+
+.gradient-bar {
+  height: 8px;
+  background: linear-gradient(90deg, #C97B6B, #A7C7C0, #D4A89A);
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+/* 海报 */
+.poster-preview {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background: linear-gradient(160deg, #FBF6F2, #F0E8E2);
+  border-radius: 28px;
+  border: 2px solid #EDE4DE;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  .poster-circle {
+    position: absolute;
+    border-radius: 50%;
+
+    &.poster-circle-1 {
+      top: -40px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      background: rgba(201, 123, 107, 0.08);
+    }
+
+    &.poster-circle-2 {
+      bottom: -60px;
+      left: -60px;
+      width: 220px;
+      height: 220px;
+      background: rgba(167, 199, 192, 0.08);
+    }
+  }
+
+  .poster-quote {
+    font-size: 32px;
+    font-weight: 700;
+    color: #3D2C2E;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  .poster-score {
+    font-size: 72px;
+    font-weight: 900;
+    color: #C97B6B;
+    margin: 16px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .poster-detail {
+    position: relative;
+    z-index: 1;
+
+    .poster-subject {
+      font-size: 22px;
+      color: #A0887E;
+      display: block;
+    }
+
+    .poster-topic {
+      font-size: 26px;
+      color: #3D2C2E;
+      font-weight: 500;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .poster-stats {
+      font-size: 22px;
+      color: #A0887E;
+      display: block;
+      margin-top: 8px;
+    }
+  }
+
+  .poster-code {
+    margin-top: 20px;
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border-radius: 12px;
+    border: 2px solid #EDE4DE;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+
+    .code-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 8px;
+
+      .code-dot {
+        width: 12px;
+        height: 12px;
+        background: #3D2C2E;
+        border-radius: 2px;
+      }
+    }
+
+    .code-label {
+      font-size: 14px;
+      color: #C4B5AB;
+      margin-top: 4px;
+    }
+  }
+}
+
+/* 按钮 */
+.share-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+
+  .btn {
+    flex: 1;
+  }
+}
+
+.share-invite {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 22px;
+  color: #C4B5AB;
+}
