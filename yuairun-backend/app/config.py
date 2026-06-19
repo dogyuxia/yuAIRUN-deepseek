@@ -29,6 +29,22 @@ class Settings(BaseSettings):
     # Mock
     use_mock_llm: bool = True
 
+    # JWT
+    jwt_secret_key: str = ""
+    jwt_algorithm: str = "HS256"
+    jwt_expire_days: int = 30
+
+    # MySQL
+    mysql_host: str = "127.0.0.1"
+    mysql_port: int = 3306
+    mysql_user: str = "root"
+    mysql_password: str = ""
+    mysql_database: str = "yuairundeep"
+
+    # 微信小程序
+    wx_appid: str = ""
+    wx_secret: str = ""
+
     model_config = {
         "env_file": ENV_FILE,
         "env_file_encoding": "utf-8",
