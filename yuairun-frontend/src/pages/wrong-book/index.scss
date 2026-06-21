@@ -1,0 +1,262 @@
+/** 错题本样式 */
+.wrongbook-page {
+  min-height: 100vh;
+  background: #F7F3F0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 导航栏 */
+.wb-nav {
+  display: flex;
+  align-items: center;
+  padding: 80px 24px 12px;
+  justify-content: space-between;
+
+  .nav-back {
+    font-size: 28px;
+    color: #A0887E;
+    padding: 8px 12px;
+  }
+
+  .nav-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #3D2C2E;
+  }
+
+  .nav-spacer {
+    width: 80px;
+  }
+}
+
+/* 学科筛选 */
+.wb-subjects {
+  padding: 8px 24px;
+
+  .subjects-scroll {
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+  }
+
+  .subject-tag {
+    display: inline-block;
+    padding: 8px 20px;
+    margin-right: 10px;
+    border-radius: 20px;
+    font-size: 26px;
+    background: #F5EDE8;
+    color: #A0887E;
+
+    &.active {
+      background: #C97B6B;
+      color: #fff;
+    }
+  }
+}
+
+/* 总数 */
+.wb-count {
+  display: block;
+  font-size: 24px;
+  color: #C4B5AB;
+  padding: 8px 24px 12px;
+}
+
+/* 列表 */
+.wb-list {
+  flex: 1;
+  padding: 0 24px 30px;
+}
+
+/* 错题卡片 */
+.wb-item {
+  background: #FBF9F7;
+  border: 2px solid #EDE4DE;
+  border-radius: 18px;
+  margin-bottom: 12px;
+  overflow: hidden;
+
+  .wb-item-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 18px;
+  }
+
+  .wb-wrong-icon {
+    font-size: 28px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .wb-item-info {
+    flex: 1;
+  }
+
+  .wb-question-text {
+    font-size: 28px;
+    color: #3D2C2E;
+    font-weight: 500;
+    display: block;
+    line-height: 1.4;
+  }
+
+  .wb-type {
+    font-size: 22px;
+    color: #C4B5AB;
+    display: block;
+    margin-top: 4px;
+  }
+}
+
+/* 预览模式 */
+.wb-item-preview {
+  padding: 0 18px 16px;
+
+  .wb-preview-answer {
+    font-size: 24px;
+    color: #D4856C;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .wb-preview-correct {
+    font-size: 24px;
+    color: #6E9B92;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .wb-preview-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .wb-mini-btn {
+    font-size: 22px;
+    padding: 6px 14px;
+    border-radius: 12px;
+    background: #F5EDE8;
+    color: #A0887E;
+    border: none;
+    line-height: 1.4;
+  }
+}
+
+/* 展开详情 */
+.wb-item-detail {
+  padding: 0 18px 16px;
+  border-top: 1px solid #EDE4DE;
+
+  .wb-answer-info {
+    padding: 12px 0;
+  }
+
+  .wb-user-answer {
+    font-size: 24px;
+    color: #3D2C2E;
+    display: block;
+    margin-bottom: 4px;
+
+    .wrong-answer {
+      color: #D4856C;
+      font-weight: 600;
+    }
+  }
+
+  .wb-correct-answer {
+    font-size: 24px;
+    color: #3D2C2E;
+    display: block;
+
+    .correct-answer {
+      color: #6E9B92;
+      font-weight: 600;
+    }
+  }
+
+  .wb-explanation {
+    font-size: 24px;
+    color: #A0887E;
+    line-height: 1.6;
+    display: block;
+    padding: 8px 0 12px;
+  }
+
+  .wb-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .wb-btn {
+    font-size: 22px;
+    padding: 8px 16px;
+    border-radius: 14px;
+    border: none;
+    line-height: 1.4;
+  }
+
+  .wb-btn-explain {
+    background: #F5EDE8;
+    color: #A0887E;
+  }
+
+  .wb-btn-retry {
+    background: #E6F0EE;
+    color: #6E9B92;
+  }
+
+  .wb-btn-master {
+    background: #F6E7E4;
+    color: #C97B6B;
+  }
+}
+
+/* 加载更多 */
+.wb-loading {
+  display: block;
+  text-align: center;
+  font-size: 26px;
+  color: #C4B5AB;
+  padding: 20px;
+}
+
+.wb-load-more {
+  display: block;
+  width: 60%;
+  margin: 16px auto;
+  padding: 16px;
+  font-size: 26px;
+  color: #A0887E;
+  background: #F5EDE8;
+  border-radius: 20px;
+  text-align: center;
+  border: none;
+}
+
+.wb-no-more {
+  display: block;
+  text-align: center;
+  font-size: 24px;
+  color: #C4B5AB;
+  padding: 20px;
+}
+
+/* 空状态 */
+.wb-empty {
+  text-align: center;
+  padding: 60px 0;
+
+  .empty-icon {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .empty-text {
+    font-size: 28px;
+    color: #C4B5AB;
+  }
+}

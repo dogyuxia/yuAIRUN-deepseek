@@ -2,7 +2,6 @@
 import { View, Text, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useQuizStore } from '../../store/quizStore'
-import { useUserStore } from '../../store/userStore'
 import ProgressBar from '../../components/ProgressBar/index'
 import QuizCard from '../../components/QuizCard/index'
 import './index.scss'
@@ -12,7 +11,6 @@ export default function Quiz() {
     questions, currentIndex, userAnswers, startTime,
     submitAnswer, nextQuestion, finishQuiz,
   } = useQuizStore()
-  const { addXp } = useUserStore()
 
   const currentQ = questions[currentIndex]
   const isAllAnswered = questions.every((q) => userAnswers[q.id] !== undefined)
@@ -21,7 +19,6 @@ export default function Quiz() {
 
   const handleSelect = (answer: string | string[]) => {
     submitAnswer(currentQ.id, answer)
-    addXp(10)
   }
 
   const handleNext = () => {

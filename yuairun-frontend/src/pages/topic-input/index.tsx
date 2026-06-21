@@ -59,10 +59,22 @@ export default function TopicInput() {
     }
   }
 
+  const handleGoHome = () => {
+    Taro.redirectTo({ url: '/pages/home/index' })
+  }
+
   return (
     <View className='topic-input-page'>
       {/* 渐变装饰条 */}
       <View className='gradient-bar' />
+
+      {/* 导航栏 */}
+      <View className='input-nav'>
+        <View className='nav-back' onClick={handleGoHome}>
+          ← 返回首页
+        </View>
+        <View className='nav-spacer' />
+      </View>
 
       {/* AI 打招呼 */}
       <View className='input-top'>

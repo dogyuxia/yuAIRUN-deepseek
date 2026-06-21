@@ -148,3 +148,15 @@
 .share-btn {
   margin-top: 16px;
 }
+
+/* 底部按钮区域 */
+.report-bottom-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  padding-bottom: 40px;
+
+  .btn {
+    flex: 1;
+  }
+}

@@ -4,6 +4,24 @@
   background: #F7F3F0;
 }
 
+/* 导航栏 */
+.input-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  .nav-back {
+    font-size: 28px;
+    color: #A0887E;
+    padding: 8px 12px;
+  }
+
+  .nav-spacer {
+    width: 80px;
+  }
+}
+
 /* 头部 */
 .input-top {
   display: flex;

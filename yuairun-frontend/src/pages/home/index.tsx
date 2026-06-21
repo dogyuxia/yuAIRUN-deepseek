@@ -1,5 +1,5 @@
 /** 首页 - 展示 Logo、快捷学科、最近学习 */
-import { View, Text, Button } from '@tarojs/components'
+import { View, Text, Button, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useDidShow } from '@tarojs/taro'
 import { useUserStore } from '../../store/userStore'
@@ -9,7 +9,7 @@ import type { QuizRecord } from '../../types/quiz'
 import './index.scss'
 
 export default function Home() {
-  const { history, loadFromStorage } = useUserStore()
+  const { history, loadFromStorage, userInfo, isLoggedIn, isLoginLoading } = useUserStore()
   const hour = new Date().getHours()
   const greeting = hour < 12 ? '🌅 早上好' : hour < 18 ? '☀️ 下午好' : '🌙 晚上好'
   const slogan = `${greeting}！输入你想学的，AI 帮你出题闯关`
@@ -34,12 +34,36 @@ export default function Home() {
     })
   }
 
+  const handleProfile = () => {
+    Taro.navigateTo({ url: '/pages/profile/index' })
+  }
+
   const recentHistory = history.slice(0, 5)
 
   return (
     <View className='home-page'>
       {/* 渐变装饰条 */}
       <View className='gradient-bar' />
+
+      {/* 顶部用户头像入口 */}
+      <View className='home-header'>
+        <View className='header-spacer' />
+        <View className='header-user' onClick={handleProfile}>
+          {isLoginLoading ? (
+            <Text className='header-loading'>...</Text>
+          ) : isLoggedIn && userInfo ? (
+            <>
+              {userInfo.avatarUrl ? (
+                <Image className='header-avatar' src={userInfo.avatarUrl} mode='aspectFill' />
+              ) : (
+                <Text className='header-avatar-text'>🧑</Text>
+              )}
+            </>
+          ) : (
+            <Text className='header-avatar-text'>🧑</Text>
+          )}
+        </View>
+      </View>
 
       {/* Logo 区域 */}
       <View className='home-logo-area'>

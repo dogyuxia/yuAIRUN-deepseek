@@ -6,7 +6,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.api.v1.endpoints import health, quiz
+from app.api.v1.endpoints import health, quiz, user
+from app.db.session import init_db, close_db
 
 
 @asynccontextmanager
@@ -17,8 +18,18 @@ async def lifespan(app: FastAPI):
         print("🔧 使用 Mock LLM 模式（测试用）")
     else:
         print("🤖 使用 DeepSeek API 模式")
+
+    # 初始化数据库
+    try:
+        await init_db()
+    except Exception as e:
+        print(f"⚠️ 数据库初始化失败（可忽略，Mock 模式正常运行）: {e}")
+
     print(f"📋 API 文档: http://localhost:{settings.app_port}/docs")
     yield
+
+    # 关闭数据库
+    await close_db()
 
 
 def create_app() -> FastAPI:
@@ -28,7 +39,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="yuAIRUN Backend",
         description="AI 闯关学园后端 API",
-        version="1.0.0",
+        version="1.1.0",
         lifespan=lifespan,
     )
 
@@ -44,6 +55,7 @@ def create_app() -> FastAPI:
     # 注册路由
     app.include_router(health.router)
     app.include_router(quiz.router)
+    app.include_router(user.router)
 
     return app
 

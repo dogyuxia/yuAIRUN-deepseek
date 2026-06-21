@@ -4,6 +4,45 @@
   background: #F7F3F0;
 }
 
+/* 顶部用户头像 */
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .header-spacer {
+    flex: 1;
+  }
+
+  .header-user {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #F5EDE8;
+  }
+
+  .header-avatar-text {
+    font-size: 48px;
+    line-height: 1;
+  }
+
+  .header-loading {
+    font-size: 28px;
+    color: #C4B5AB;
+  }
+}
+
 /* 渐变条 */
 .gradient-bar {
   height: 6px;

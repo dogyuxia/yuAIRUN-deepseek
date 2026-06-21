@@ -9,7 +9,7 @@ import type { AnalyzeReportData } from '../../types/report'
 import './index.scss'
 
 export default function Report() {
-  const { lastRecord } = useQuizStore()
+  const { lastRecord, resetQuiz } = useQuizStore()
   const [report, setReport] = useState<AnalyzeReportData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -49,6 +49,16 @@ export default function Report() {
 
   const handleShare = () => {
     Taro.navigateTo({ url: '/pages/share/index' })
+  }
+
+  const handleGoHome = () => {
+    resetQuiz()
+    Taro.redirectTo({ url: '/pages/home/index' })
+  }
+
+  const handleRetry = () => {
+    resetQuiz()
+    Taro.redirectTo({ url: '/pages/topic-input/index' })
   }
 
   if (loading) {
@@ -147,6 +157,15 @@ export default function Report() {
       <Button className='btn btn-primary share-btn' onClick={handleShare}>
         📤 生成分享海报
       </Button>
+
+      <View className='report-bottom-actions'>
+        <Button className='btn btn-outline' onClick={handleRetry}>
+          🔄 再来一次
+        </Button>
+        <Button className='btn btn-outline' onClick={handleGoHome}>
+          🏠 返回首页
+        </Button>
+      </View>
     </View>
   )
 }

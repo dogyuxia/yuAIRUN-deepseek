@@ -6,6 +6,8 @@ export default defineAppConfig({
     'pages/result/index',
     'pages/report/index',
     'pages/share/index',
+    'pages/profile/index',
+    'pages/wrong-book/index',
   ],
   window: {
     navigationStyle: 'custom',
