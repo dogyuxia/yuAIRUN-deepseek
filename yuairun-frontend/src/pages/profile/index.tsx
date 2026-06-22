@@ -13,6 +13,7 @@ export default function Profile() {
     profile,
     loadUserProfile,
     xp,
+    logout,
   } = useUserStore()
 
   useDidShow(() => {
@@ -32,6 +33,23 @@ export default function Profile() {
   const handleShare = () => {
     Taro.shareAppMessage({
       title: 'AI闯关学园 - 用AI出题，快乐闯关学习',
+    })
+  }
+
+  const handleGoLogin = () => {
+    Taro.navigateTo({ url: '/pages/login/index' })
+  }
+
+  const handleLogout = () => {
+    Taro.showModal({
+      title: '提示',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          logout()
+          Taro.showToast({ title: '已退出登录', icon: 'none' })
+        }
+      },
     })
   }
 
@@ -158,9 +176,12 @@ export default function Profile() {
         )}
 
         {!isLoggedIn && (
-          <View className='profile-login-tip'>
+          <View className='profile-login-tip' onClick={handleGoLogin}>
             <Text className='tip-icon'>🔓</Text>
             <Text className='tip-text'>登录后可查看学习数据</Text>
+            <View className='btn btn-primary login-entry-btn'>
+              去登录
+            </View>
           </View>
         )}
 
@@ -177,6 +198,15 @@ export default function Profile() {
             </View>
           ))}
         </View>
+
+        {/* 退出登录 */}
+        {isLoggedIn && (
+          <View className='logout-section'>
+            <View className='btn logout-btn' onClick={handleLogout}>
+              退出登录
+            </View>
+          </View>
+        )}
       </ScrollView>
     </View>
   )

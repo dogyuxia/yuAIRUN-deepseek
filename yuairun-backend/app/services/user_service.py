@@ -8,7 +8,7 @@ from typing import Optional
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.utils.auth import create_token
+from app.utils.auth import create_token, hash_password, verify_password
 from app.db.models.user import UserModel
 from app.db.models.quiz_history import QuizHistoryModel
 from app.db.models.quiz_answer import QuizAnswerModel
@@ -143,6 +143,70 @@ async def login_or_register(
             "level": user.level,
             "levelTitle": get_level_title(user.level),
             "isNewUser": is_new_user,
+        },
+    }
+
+
+# ============================================================
+# 手动登录/注册
+# ============================================================
+
+async def manual_login_or_register(
+    db: AsyncSession,
+    username: str,
+    password: str,
+) -> dict:
+    """
+    用户名密码登录/自动注册
+
+    1. 查 username 是否已存在
+    2. 存在 → 校验密码
+    3. 不存在 → 自动注册新用户
+    """
+    now = datetime.now(timezone.utc)
+    openid = f"manual_{username}"  # 手动登录用户使用特殊 openid 前缀
+
+    result = await db.execute(select(UserModel).where(UserModel.username == username))
+    user = result.scalar_one_or_none()
+
+    if user:
+        # 已存在 → 校验密码
+        if not verify_password(password, user.password_hash or ""):
+            raise ValueError("密码错误")
+        user.update_login_time()
+    else:
+        # 不存在 → 自动注册
+        user = UserModel(
+            id=generate_id("u"),
+            openid=openid,
+            username=username,
+            nickname=username,
+            password_hash=hash_password(password),
+            xp=0,
+            level=1,
+            last_login_at=now,
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(user)
+
+    await db.commit()
+    await db.refresh(user)
+
+    # 签发 JWT
+    token, expires_in = create_token(user.id, user.openid)
+
+    return {
+        "token": token,
+        "expiresIn": expires_in,
+        "user": {
+            "id": user.id,
+            "nickname": user.nickname,
+            "avatarUrl": user.avatar_url,
+            "xp": user.xp,
+            "level": user.level,
+            "levelTitle": get_level_title(user.level),
+            "isNewUser": user.username == username and user.xp == 0,
         },
     }
 

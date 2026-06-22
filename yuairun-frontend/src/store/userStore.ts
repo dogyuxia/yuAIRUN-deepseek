@@ -135,24 +135,49 @@ export const useUserStore = create<UserState>((set, get) => ({
       if (res.success && res.data) {
         setStorageData(STORAGE_KEYS.TOKEN, res.data.token)
         setStorageData(STORAGE_KEYS.USER_INFO, res.data.user)
-        // 同步 XP 到本地
         setStorageData(STORAGE_KEYS.USER_XP, res.data.user.xp)
+        // 切用户时清除旧用户的本地历史
+        removeStorageData(STORAGE_KEYS.QUIZ_HISTORY)
         set({
           token: res.data.token,
           userInfo: res.data.user,
           isLoggedIn: true,
           xp: res.data.user.xp,
           isLoginLoading: false,
+          history: [],
         })
-        // 异步同步本地数据到云端
-        get().syncHistory().catch(() => {})
-        get().syncWrongBook().catch(() => {})
+        // 异步加载 profile（含该用户的服务端统计数据）
+        get().loadUserProfile().catch(() => {})
       } else {
         set({ isLoginLoading: false })
       }
     } catch (e) {
       console.error('静默登录失败:', e)
       set({ isLoginLoading: false })
+    }
+  },
+
+  manualLogin: async (username: string, password: string) => {
+    try {
+      const res = await userApi.manualLogin(username, password)
+      if (res.success && res.data) {
+        setStorageData(STORAGE_KEYS.TOKEN, res.data.token)
+        setStorageData(STORAGE_KEYS.USER_INFO, res.data.user)
+        setStorageData(STORAGE_KEYS.USER_XP, res.data.user.xp)
+        removeStorageData(STORAGE_KEYS.QUIZ_HISTORY)
+        set({
+          token: res.data.token,
+          userInfo: res.data.user,
+          isLoggedIn: true,
+          xp: res.data.user.xp,
+          history: [],
+        })
+        return true
+      }
+      return false
+    } catch (e) {
+      console.error('手动登录失败:', e)
+      return false
     }
   },
 
@@ -174,11 +199,13 @@ export const useUserStore = create<UserState>((set, get) => ({
         setStorageData(STORAGE_KEYS.TOKEN, res.data.token)
         setStorageData(STORAGE_KEYS.USER_INFO, res.data.user)
         setStorageData(STORAGE_KEYS.USER_XP, res.data.user.xp)
+        removeStorageData(STORAGE_KEYS.QUIZ_HISTORY)
         set({
           token: res.data.token,
           userInfo: res.data.user,
           isLoggedIn: true,
           xp: res.data.user.xp,
+          history: [],
         })
         return true
       }
@@ -192,11 +219,16 @@ export const useUserStore = create<UserState>((set, get) => ({
   logout: () => {
     removeStorageData(STORAGE_KEYS.TOKEN)
     removeStorageData(STORAGE_KEYS.USER_INFO)
+    removeStorageData(STORAGE_KEYS.DEVICE_ID)
+    removeStorageData(STORAGE_KEYS.QUIZ_HISTORY)
+    removeStorageData(STORAGE_KEYS.USER_XP)
     set({
       token: null,
       userInfo: null,
       isLoggedIn: false,
       profile: null,
+      xp: 0,
+      history: [],
     })
   },
 

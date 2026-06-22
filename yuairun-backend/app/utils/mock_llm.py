@@ -80,6 +80,7 @@ def get_mock_quiz_response(subject: str, topic: str, count: int) -> dict:
             "explanation": f"「{topic}」强调以价值为导向的评估方式。代码行数、加班时长等是误导性指标。真正的进步体现在交付的价值、质量和团队健康度上。",
             "difficulty": "hard",
             "knowledgePoint": topic,
+            "knowledgeSource": "model_knowledge",
         },
     ]
 
@@ -93,6 +94,8 @@ def get_mock_quiz_response(subject: str, topic: str, count: int) -> dict:
             "topic": topic,
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "model": "mock-deepseek-chat",
+            "searchEnhanced": False,
+            "searchSources": [],
         },
     }
 

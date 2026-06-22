@@ -22,6 +22,9 @@ class UserModel(Base):
     is_deleted = Column(SmallInteger, nullable=False, default=0, comment="软删除标记")
     created_at = Column(DateTime, nullable=False, comment="创建时间")
     updated_at = Column(DateTime, nullable=False, comment="更新时间")
+    # 🆕 手动登录字段
+    username = Column(String(64), nullable=True, unique=True, comment="登录用户名")
+    password_hash = Column(String(256), nullable=True, comment="bcrypt 密码哈希")
 
     def to_dict(self) -> dict:
         """转为字典"""

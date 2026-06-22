@@ -1,9 +1,29 @@
 """数据库连接与会话管理 - SQLAlchemy 2.0 + aiomysql 异步模式"""
 
+import asyncio
+
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
 from app.config import get_settings
+
+# ============================================================
+# aiomysql 兼容性补丁
+# 修复 SQLAlchemy 2.0.31+ 与 aiomysql 0.3.2 的 ping() 签名不兼容问题
+# ============================================================
+try:
+    import aiomysql
+
+    _orig_ping = aiomysql.Connection.ping
+
+    async def _patched_ping(self, reconnect=None):
+        if reconnect is None:
+            reconnect = True
+        return await _orig_ping(self, reconnect)
+
+    aiomysql.Connection.ping = _patched_ping
+except ImportError:
+    pass
 
 
 class Base(DeclarativeBase):
@@ -39,7 +59,7 @@ async def init_db():
     """
     global _engine, _session_maker
     database_url = get_database_url()
-    _engine = create_async_engine(database_url, echo=False, pool_pre_ping=True)
+    _engine = create_async_engine(database_url, echo=False, pool_pre_ping=False)
     _session_maker = async_sessionmaker(_engine, expire_on_commit=False)
 
     # 自动创建表

@@ -184,7 +184,7 @@
   }
 }
 
-/* 登录提示 */
+/* 登录提示（可点击） */
 .profile-login-tip {
   text-align: center;
   padding: 40px 0;
@@ -198,6 +198,36 @@
   .tip-text {
     font-size: 26px;
     color: #C4B5AB;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* 登录入口按钮 */
+.login-entry-btn {
+  display: inline-block;
+  padding: 16px 60px;
+  font-size: 28px;
+  border-radius: 44px;
+}
+
+/* 退出登录区域 */
+.logout-section {
+  padding: 20px 0 40px;
+  text-align: center;
+}
+
+.logout-btn {
+  display: inline-block;
+  padding: 18px 60px;
+  font-size: 26px;
+  color: #D4856C;
+  background: #FBF9F7;
+  border: 2px solid #EDE4DE;
+  border-radius: 44px;
+
+  &:active {
+    background: #F5EDE8;
   }
 }
 

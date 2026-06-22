@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_session
 from app.models.user import (
     LoginRequest,
+    ManualLoginRequest,
     RefreshTokenRequest,
     UpdateProfileRequest,
     HistorySyncRequest,
@@ -15,6 +16,7 @@ from app.models.user import (
 )
 from app.services.user_service import (
     login_or_register,
+    manual_login_or_register,
     get_user_profile,
     update_user_profile,
     get_history_list,
@@ -81,6 +83,22 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_session)):
             avatar_url=request.avatarUrl,
         )
         return ApiResponse(success=True, data=data)
+    except Exception as e:
+        return ApiResponse(success=False, error=f"登录失败: {str(e)}")
+
+
+@router.post("/login/manual")
+async def manual_login(request: ManualLoginRequest, db: AsyncSession = Depends(get_session)):
+    """手动登录/注册（用户名+密码，未注册自动创建）"""
+    try:
+        data = await manual_login_or_register(
+            db,
+            username=request.username,
+            password=request.password,
+        )
+        return ApiResponse(success=True, data=data)
+    except ValueError as e:
+        return ApiResponse(success=False, error=str(e))
     except Exception as e:
         return ApiResponse(success=False, error=f"登录失败: {str(e)}")
 

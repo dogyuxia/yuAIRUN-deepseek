@@ -12,6 +12,9 @@ export interface QuizOption {
   content: string
 }
 
+/** 知识来源类型 */
+export type KnowledgeSource = 'web_search' | 'model_knowledge'
+
 /** 单道题目 */
 export interface QuizQuestion {
   id: string
@@ -22,6 +25,8 @@ export interface QuizQuestion {
   explanation: string
   difficulty: Difficulty
   knowledgePoint: string
+  /** 知识来源: web_search=基于搜索结果, model_knowledge=基于模型知识 */
+  knowledgeSource?: KnowledgeSource
 }
 
 /** 题目元数据 */
@@ -30,6 +35,10 @@ export interface QuizMetadata {
   topic: string
   generatedAt: string
   model: string
+  /** 是否使用了搜索增强 */
+  searchEnhanced?: boolean
+  /** 搜索来源 URL 列表 */
+  searchSources?: string[]
 }
 
 /** AI 生成的题目数据 */

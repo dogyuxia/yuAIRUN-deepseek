@@ -1,0 +1,148 @@
+/** 登录页样式 - 暖色调，延续个人中心风格 */
+.login-page {
+  min-height: 100vh;
+  background: #F7F3F0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 导航栏 */
+.login-nav {
+  display: flex;
+  align-items: center;
+  padding: 80px 24px 16px;
+  justify-content: space-between;
+
+  .nav-back {
+    font-size: 28px;
+    color: #A0887E;
+    padding: 8px 12px;
+  }
+
+  .nav-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #3D2C2E;
+  }
+
+  .nav-spacer {
+    width: 80px;
+  }
+}
+
+/* 登录卡片 */
+.login-card {
+  margin: 20px 24px;
+  padding: 40px 32px;
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+
+  .login-icon {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .login-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #3D2C2E;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .login-subtitle {
+    font-size: 24px;
+    color: #C4B5AB;
+    display: block;
+  }
+}
+
+/* 输入框 */
+.login-field {
+  display: flex;
+  align-items: center;
+  border: 3px solid #EDE4DE;
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  background: #FBF9F7;
+
+  .field-icon {
+    font-size: 28px;
+    margin-right: 16px;
+  }
+
+  .field-input {
+    flex: 1;
+    font-size: 26px;
+    color: #3D2C2E;
+    height: 40px;
+  }
+}
+
+/* 错误提示 */
+.login-error {
+  display: block;
+  font-size: 22px;
+  color: #D4856C;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* 登录按钮 */
+.login-btn {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.login-hint {
+  display: block;
+  text-align: center;
+  font-size: 22px;
+  color: #C4B5AB;
+  margin-top: 12px;
+}
+
+/* 分割线 */
+.login-divider {
+  display: flex;
+  align-items: center;
+  margin: 32px 0;
+
+  .divider-line {
+    flex: 1;
+    height: 2px;
+    background: #EDE4DE;
+  }
+
+  .divider-text {
+    padding: 0 16px;
+    font-size: 22px;
+    color: #C4B5AB;
+  }
+}
+
+/* 微信登录按钮 */
+.btn-wechat {
+  width: 100%;
+  height: 88px;
+  line-height: 88px;
+  text-align: center;
+  border-radius: 44px;
+  font-size: 28px;
+  font-weight: 600;
+  background: #fff;
+  border: 3px solid #EDE4DE;
+  color: #3D2C2E;
+
+  &:active {
+    background: #F5EDE8;
+  }
+}

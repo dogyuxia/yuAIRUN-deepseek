@@ -175,6 +175,12 @@ class ApiResponse(BaseModel):
     error: Optional[str] = None
 
 
+class ManualLoginRequest(BaseModel):
+    """手动登录请求"""
+    username: str = Field(..., min_length=6, max_length=6, description="6位用户名")
+    password: str = Field(..., min_length=6, max_length=6, description="6位密码")
+
+
 class MessageResponse(BaseModel):
     """消息响应"""
     message: str = Field(description="操作消息")

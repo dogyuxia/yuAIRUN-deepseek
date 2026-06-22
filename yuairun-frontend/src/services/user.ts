@@ -9,6 +9,18 @@ import type {
   MessageResponse,
 } from '../types/user'
 
+/** 手动登录（用户名+密码，未注册自动创建） */
+export async function manualLogin(
+  username: string,
+  password: string,
+): Promise<LoginResponse> {
+  return request<LoginResponse>({
+    url: '/api/user/login/manual',
+    method: 'POST',
+    data: { username, password },
+  })
+}
+
 /** 微信静默登录 */
 export async function login(
   code: string,

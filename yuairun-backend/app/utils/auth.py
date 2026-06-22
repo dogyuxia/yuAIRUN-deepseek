@@ -76,6 +76,23 @@ def verify_token(token: str) -> dict:
         )
 
 
+# ============================================================
+# 密码工具（bcrypt）
+# ============================================================
+
+import bcrypt as _bcrypt
+
+
+def hash_password(password: str) -> str:
+    """bcrypt 哈希密码"""
+    return _bcrypt.hashpw(password.encode(), _bcrypt.gensalt()).decode()
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """校验密码"""
+    return _bcrypt.checkpw(plain_password.encode(), hashed_password.encode())
+
+
 async def get_current_user_id(
     credentials: HTTPAuthorizationCredentials | None = Depends(security),
 ) -> str:

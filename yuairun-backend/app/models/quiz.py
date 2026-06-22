@@ -22,6 +22,12 @@ class QuizQuestion(BaseModel):
     explanation: str = Field(description="题目解析")
     difficulty: Literal["easy", "medium", "hard"] = Field(description="难度")
     knowledgePoint: str = Field(validation_alias="knowledgePoint", description="知识点标签")
+    # 🆕 搜索增强：知识来源
+    knowledgeSource: Literal["web_search", "model_knowledge"] = Field(
+        default="model_knowledge",
+        validation_alias="knowledgeSource",
+        description="知识来源: web_search=基于搜索结果, model_knowledge=基于模型知识",
+    )
 
 
 class QuizMetadata(BaseModel):
@@ -32,6 +38,18 @@ class QuizMetadata(BaseModel):
     topic: str = Field(description="知识点")
     generatedAt: str = Field(validation_alias="generatedAt", description="生成时间")
     model: str = Field(description="使用的模型")
+    # 🆕 搜索增强：是否使用了搜索增强
+    searchEnhanced: bool = Field(
+        default=False,
+        validation_alias="searchEnhanced",
+        description="是否使用了搜索增强",
+    )
+    # 🆕 搜索增强：搜索来源 URL 列表
+    searchSources: list[str] = Field(
+        default=[],
+        validation_alias="searchSources",
+        description="搜索来源 URL 列表",
+    )
 
 
 class QuizResponse(BaseModel):
