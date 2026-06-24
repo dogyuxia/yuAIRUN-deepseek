@@ -23,10 +23,10 @@ class QuizQuestion(BaseModel):
     difficulty: Literal["easy", "medium", "hard"] = Field(description="难度")
     knowledgePoint: str = Field(validation_alias="knowledgePoint", description="知识点标签")
     # 🆕 搜索增强：知识来源
-    knowledgeSource: Literal["web_search", "model_knowledge"] = Field(
+    knowledgeSource: Literal["web_search", "model_knowledge", "knowledge_base"] = Field(
         default="model_knowledge",
         validation_alias="knowledgeSource",
-        description="知识来源: web_search=基于搜索结果, model_knowledge=基于模型知识",
+        description="知识来源: web_search=基于搜索结果, model_knowledge=基于模型知识, knowledge_base=基于知识库",
     )
 
 
@@ -50,6 +50,24 @@ class QuizMetadata(BaseModel):
         validation_alias="searchSources",
         description="搜索来源 URL 列表",
     )
+    # 🆕 RAG 知识库：搜索模式
+    searchMode: str = Field(
+        default="search",
+        validation_alias="searchMode",
+        description="搜索模式: search/knowledge_base/hybrid",
+    )
+    # 🆕 RAG 知识库：使用的知识库ID
+    knowledgeBaseId: str | None = Field(
+        default=None,
+        validation_alias="knowledgeBaseId",
+        description="使用的知识库ID",
+    )
+    # 🆕 RAG 知识库：使用的知识库名称
+    knowledgeBaseName: str | None = Field(
+        default=None,
+        validation_alias="knowledgeBaseName",
+        description="使用的知识库名称",
+    )
 
 
 class QuizResponse(BaseModel):
@@ -69,6 +87,15 @@ class GenerateQuizRequest(BaseModel):
     count: int = Field(default=5, ge=1, le=20, description="题目数量")
     difficulty: Literal["easy", "medium", "hard", "mixed"] = Field(default="medium", description="难度")
     type: Literal["single", "multiple", "judge", "mixed"] = Field(default="single", description="题目类型")
+    # 🆕 RAG 知识库
+    knowledgeBaseId: str | None = Field(
+        default=None,
+        description="知识库ID，指定后从该知识库检索资料出题",
+    )
+    searchMode: Literal["search", "knowledge_base", "hybrid"] = Field(
+        default="search",
+        description="搜索模式: search=AI搜索, knowledge_base=仅知识库, hybrid=混合",
+    )
 
 
 class GenerateQuizResponse(BaseModel):

@@ -48,12 +48,35 @@ class Settings(BaseSettings):
     wx_appid: str = ""
     wx_secret: str = ""
 
+    # Embedding & ChromaDB
+    embedding_cache_dir: str = "./models_cache"
+    chroma_persist_dir: str = "./chroma_data"
+
+    # 知识库
+    knowledge_base_dir: str = "./knowledge_base"
+
+    # ChromaDB 集合名称
+    chroma_collection_name: str = "yuairun_knowledge"
+
     model_config = {
         "env_file": ENV_FILE,
         "env_file_encoding": "utf-8",
         "case_sensitive": False,
         "extra": "ignore",
     }
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # 将相对路径转为基于 backend 目录的绝对路径
+        if self.embedding_cache_dir and not os.path.isabs(self.embedding_cache_dir):
+            self.embedding_cache_dir = os.path.abspath(
+                os.path.join(BACKEND_DIR, self.embedding_cache_dir))
+        if self.chroma_persist_dir and not os.path.isabs(self.chroma_persist_dir):
+            self.chroma_persist_dir = os.path.abspath(
+                os.path.join(BACKEND_DIR, self.chroma_persist_dir))
+        if self.knowledge_base_dir and not os.path.isabs(self.knowledge_base_dir):
+            self.knowledge_base_dir = os.path.abspath(
+                os.path.join(BACKEND_DIR, self.knowledge_base_dir))
 
 
 @lru_cache()

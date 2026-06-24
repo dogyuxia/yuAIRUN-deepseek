@@ -1,0 +1,6 @@
+
+# Runtime data
+chroma_data/
+models_cache/
+uploads/
+*.log

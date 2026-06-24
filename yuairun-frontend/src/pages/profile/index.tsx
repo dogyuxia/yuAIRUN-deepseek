@@ -31,6 +31,7 @@ export default function Profile() {
   }
 
   const handleShare = () => {
+    // @ts-ignore shareAppMessage is available at runtime
     Taro.shareAppMessage({
       title: 'AI闯关学园 - 用AI出题，快乐闯关学习',
     })
@@ -68,8 +69,13 @@ export default function Profile() {
   const stats = profile?.stats
   const recentHistories = profile?.recentHistories || []
 
+  const handleGoKnowledge = () => {
+    Taro.navigateTo({ url: '/pages/knowledge/index' })
+  }
+
   const menuItems = [
     { icon: '📕', label: '错题本', onClick: handleGoWrongBook },
+    { icon: '📚', label: '知识库', onClick: handleGoKnowledge },
     { icon: '📤', label: '分享给好友', onClick: handleShare },
   ]
 

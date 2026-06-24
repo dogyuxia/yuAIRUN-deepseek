@@ -10,7 +10,7 @@ from app.config import get_settings
 from app.models.report import AnalyzeReportData
 from app.prompts.report_prompt import REPORT_SYSTEM_PROMPT, REPORT_HUMAN_PROMPT
 from app.utils.mock_llm import get_mock_report_response
-from app.chains.quiz_chain import parse_json_response
+from app.chains.quiz_chain import safe_parse_json
 
 
 def format_quiz_details(questions: list, user_answers: dict) -> str:
@@ -71,14 +71,18 @@ class ReportChain:
     async def ainvoke(self, inputs: dict) -> AnalyzeReportData:
         chain = self.prompt | self.llm
         result = await chain.ainvoke(inputs)
-        parsed = parse_json_response(result.content)
-        return AnalyzeReportData(**parsed)
+        parsed = safe_parse_json(result.content)
+        if parsed is not None:
+            return AnalyzeReportData(**parsed)
+        raise ValueError("分析报告 JSON 解析失败")
 
     def invoke(self, inputs: dict) -> AnalyzeReportData:
         chain = self.prompt | self.llm
         result = chain.invoke(inputs)
-        parsed = parse_json_response(result.content)
-        return AnalyzeReportData(**parsed)
+        parsed = safe_parse_json(result.content)
+        if parsed is not None:
+            return AnalyzeReportData(**parsed)
+        raise ValueError("分析报告 JSON 解析失败")
 
 
 class MockReportChain:

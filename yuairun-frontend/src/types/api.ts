@@ -9,6 +9,10 @@ export interface GenerateQuizRequest {
   count: number
   difficulty: string
   type: string
+  /** 🆕 知识库 ID（指定后从该知识库检索） */
+  knowledgeBaseId?: string
+  /** 🆕 搜索模式 */
+  searchMode?: 'search' | 'knowledge_base' | 'hybrid'
 }
 
 /** 生成题目响应 */

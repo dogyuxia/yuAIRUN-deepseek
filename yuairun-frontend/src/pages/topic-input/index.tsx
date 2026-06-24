@@ -6,7 +6,9 @@ import { useQuizStore } from '../../store/quizStore'
 import { useUserStore } from '../../store/userStore'
 import { generateQuiz } from '../../services/quiz'
 import LoadingSpinner from '../../components/LoadingSpinner/index'
+import KnowledgeBaseSelector from '../../components/KnowledgeBaseSelector/index'
 import { QUIZ_COUNT_OPTIONS, DIFFICULTY_OPTIONS } from '../../utils/constants'
+import type { SearchMode } from '../../types/knowledge'
 import './index.scss'
 
 export default function TopicInput() {
@@ -18,6 +20,11 @@ export default function TopicInput() {
   const [count, setCount] = useState(5)
   const [difficulty, setDifficulty] = useState('medium')
   const [isLoading, setIsLoading] = useState(false)
+
+  // 🆕 知识库相关状态
+  const [selectedKbId, setSelectedKbId] = useState<string | null>(null)
+  const [selectedKbName, setSelectedKbName] = useState<string | null>(null)
+  const [searchMode, setSearchMode] = useState<SearchMode>('search')
 
   const handleGenerate = async () => {
     if (!topic.trim()) {
@@ -40,6 +47,9 @@ export default function TopicInput() {
         count,
         difficulty,
         type: 'single',
+        // 🆕 携带知识库参数
+        ...(selectedKbId ? { knowledgeBaseId: selectedKbId } : {}),
+        searchMode,
       })
 
       if (response.success && response.data) {
@@ -61,6 +71,10 @@ export default function TopicInput() {
 
   const handleGoHome = () => {
     Taro.redirectTo({ url: '/pages/home/index' })
+  }
+
+  const handleManageKb = () => {
+    Taro.navigateTo({ url: '/pages/knowledge/index' })
   }
 
   return (
@@ -92,6 +106,23 @@ export default function TopicInput() {
         <View className='chip'>📄 上传文档</View>
       </View>
 
+      {/* 🆕 知识库选择器 */}
+      <KnowledgeBaseSelector
+        selectedKbId={selectedKbId}
+        searchMode={searchMode}
+        onSelectKb={(id, name) => {
+          setSelectedKbId(id)
+          setSelectedKbName(name)
+        }}
+        onSelectMode={setSearchMode}
+      />
+
+      {/* 管理知识库入口 */}
+      <View className='kb-manage-entry' onClick={handleManageKb}>
+        <Text>📚 管理知识库</Text>
+        <Text>→</Text>
+      </View>
+
       {/* 学科输入 */}
       <View className='input-field'>
         <Text className='field-label'>📂 学科类别</Text>
@@ -113,6 +144,7 @@ export default function TopicInput() {
           value={topic}
           onInput={(e) => setTopic(e.detail.value)}
           maxlength={500}
+          // @ts-ignore rows is supported at runtime
           rows={4}
         />
         <Text className='input-tip'>已输入 {topic.length} 字，建议 10~200 字</Text>
@@ -149,6 +181,15 @@ export default function TopicInput() {
           </View>
         </View>
       </View>
+
+      {/* 当前搜索模式标签 */}
+      {selectedKbId && (
+        <View className='search-mode-tag'>
+          📚 {selectedKbName} ·{' '}
+          {searchMode === 'knowledge_base' ? '🔍 仅知识库' :
+           searchMode === 'search' ? '🕸️ 仅 AI 搜索' : '🔀 混合模式'}
+        </View>
+      )}
 
       {/* 生成按钮 */}
       <Button

@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.api.v1.endpoints import health, quiz, user
+from app.api.v1.endpoints import health, quiz, user, knowledge, document
 from app.db.session import init_db, close_db
 
 
@@ -24,6 +24,20 @@ async def lifespan(app: FastAPI):
         await init_db()
     except Exception as e:
         print(f"⚠️ 数据库初始化失败（可忽略，Mock 模式正常运行）: {e}")
+
+    # 初始化系统知识库（无论 mock 模式都运行，因为不依赖 LLM）
+    try:
+        from app.services.knowledge_service import seed_system_knowledge_bases
+        await seed_system_knowledge_bases()
+    except Exception as e:
+        print(f"⚠️ 系统知识库初始化失败: {e}")
+
+    # 系统知识包文件索引（模型已缓存，直接同步执行）
+    try:
+        from app.services.knowledge_service import _index_system_markdown_files
+        await _index_system_markdown_files()
+    except Exception as e:
+        print(f"⚠️ 系统知识包索引失败: {e}")
 
     print(f"📋 API 文档: http://localhost:{settings.app_port}/docs")
     yield
@@ -56,6 +70,8 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(quiz.router)
     app.include_router(user.router)
+    app.include_router(knowledge.router)
+    app.include_router(document.router)
 
     return app
 

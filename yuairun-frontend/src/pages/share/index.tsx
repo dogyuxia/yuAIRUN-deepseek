@@ -34,6 +34,7 @@ export default function Share() {
   }
 
   const handleShare = () => {
+    // @ts-ignore shareAppMessage is available at runtime
     Taro.shareAppMessage({
       title: `我在「AI闯关学园」学习了${record.topic}，答对了${record.correctCount}/${record.totalCount}题！`,
       path: '/pages/home/index',

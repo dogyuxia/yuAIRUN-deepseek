@@ -26,6 +26,8 @@ export default function Report() {
   }, [])
 
   const fetchReport = async (record: QuizRecord) => {
+    setLoading(true)
+    setError('')
     try {
       const response = await analyzeQuiz({
         subject: record.subject,

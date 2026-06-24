@@ -9,6 +9,8 @@ export default defineAppConfig({
     'pages/profile/index',
     'pages/wrong-book/index',
     'pages/login/index',
+    'pages/knowledge/index',
+    'pages/knowledge-detail/index',
   ],
   window: {
     navigationStyle: 'custom',

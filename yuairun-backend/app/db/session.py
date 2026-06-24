@@ -82,9 +82,9 @@ async def close_db():
         print("✅ 数据库连接已关闭")
 
 
-async def get_session() -> AsyncSession:
+async def get_session_dep() -> AsyncSession:
     """
-    获取数据库会话（用于依赖注入）
+    获取数据库会话（用于 FastAPI 依赖注入）
 
     Yields:
         AsyncSession 实例
@@ -97,3 +97,33 @@ async def get_session() -> AsyncSession:
             yield session
         finally:
             await session.close()
+
+
+class DbSession:
+    """
+    数据库会话上下文管理器（用于服务层直接使用）
+    
+    用法:
+        async with DbSession() as session:
+            session.add(...)
+            await session.commit()  # 需要手动提交
+    """
+    
+    def __init__(self):
+        self.session = None
+    
+    async def __aenter__(self) -> AsyncSession:
+        if _session_maker is None:
+            raise RuntimeError("数据库未初始化，请先调用 init_db()")
+        self.session = _session_maker()
+        return self.session
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        if self.session:
+            if exc_type is not None:
+                await self.session.rollback()
+            await self.session.close()
+
+
+# 兼容旧名
+get_session = DbSession

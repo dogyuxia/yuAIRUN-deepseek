@@ -8,6 +8,18 @@ from app.models.quiz import GenerateQuizRequest, QuizResponse
 from app.models.report import AnalyzeQuizRequest, AnalyzeReportData
 
 
+@pytest.fixture(autouse=True)
+def _mock_settings():
+    """确保每次测试使用干净的 Mock LLM 配置"""
+    from app.config import get_settings
+    get_settings.cache_clear()
+    # 设置环境变量，强制 Mock 模式
+    import os
+    os.environ.setdefault("USE_MOCK_LLM", "true")
+    yield
+    get_settings.cache_clear()
+
+
 @pytest.fixture
 def app():
     """创建测试用应用实例"""

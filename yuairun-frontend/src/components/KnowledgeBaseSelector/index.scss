@@ -1,0 +1,166 @@
+.kb-selector {
+  margin-bottom: 24px;
+}
+
+.kb-selector-header {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+
+.kb-selector-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kb-current {
+  font-size: 24px;
+  color: #3D2C2E;
+}
+
+.kb-arrow {
+  font-size: 20px;
+  color: #C4B5AB;
+}
+
+.kb-selector-body {
+  background: #fff;
+  border-radius: 0 0 16px 16px;
+  margin-top: 2px;
+  padding: 4px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.kb-loading {
+  text-align: center;
+  padding: 24px;
+  font-size: 22px;
+  color: #C4B5AB;
+}
+
+.kb-error {
+  text-align: center;
+  padding: 24px;
+}
+
+.kb-error-text {
+  font-size: 22px;
+  color: #E08E8E;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.kb-retry-btn {
+  font-size: 20px;
+  color: #6E9B92;
+  text-decoration: underline;
+  padding: 4px 12px;
+}
+
+.kb-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  cursor: pointer;
+
+  &.active {
+    background: #F6E7E4;
+  }
+}
+
+.kb-option-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.kb-option-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.kb-option-name {
+  font-size: 24px;
+  color: #3D2C2E;
+}
+
+.kb-option-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kb-badge {
+  font-size: 16px;
+  background: #E6F0EE;
+  color: #6E9B92;
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+.kb-option-desc {
+  font-size: 20px;
+  color: #C4B5AB;
+  margin-top: 2px;
+  display: block;
+}
+
+/* 搜索模式选择 */
+.mode-selector {
+  margin-top: 12px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mode-label {
+  font-size: 22px;
+  color: #A0887E;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.mode-options {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-chip {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  border-radius: 12px;
+  background: #F5EDE8;
+  cursor: pointer;
+
+  &.active {
+    background: #C97B6B;
+    color: #fff;
+
+    .mode-text { color: #fff; }
+  }
+}
+
+.mode-icon {
+  font-size: 24px;
+}
+
+.mode-text {
+  font-size: 20px;
+  color: #B58A7A;
+}
+
+.mode-desc {
+  display: block;
+  font-size: 18px;
+  color: #C4B5AB;
+  margin-top: 8px;
+  text-align: center;
+}

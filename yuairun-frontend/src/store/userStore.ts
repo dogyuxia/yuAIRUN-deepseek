@@ -34,6 +34,7 @@ interface UserState {
   // Actions - 用户认证
   silentLogin: () => Promise<void>
   login: (code: string, nickname?: string, avatarUrl?: string) => Promise<boolean>
+  manualLogin: (username: string, password: string) => Promise<boolean>
   logout: () => void
   loadUserProfile: () => Promise<void>
 

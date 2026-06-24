@@ -15,6 +15,17 @@ from app.main import create_app
 from app.utils.auth import create_token
 
 
+@pytest.fixture(autouse=True)
+def _mock_settings():
+    """确保每次测试使用干净的 Mock LLM 配置"""
+    from app.config import get_settings
+    get_settings.cache_clear()
+    import os
+    os.environ.setdefault("USE_MOCK_LLM", "true")
+    yield
+    get_settings.cache_clear()
+
+
 @pytest.fixture
 def app():
     """创建测试用应用实例"""

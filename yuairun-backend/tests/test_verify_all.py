@@ -55,6 +55,65 @@ def test_analyze(questions, user_answers):
     print(f"   📌 薄弱: {data['data']['weakPoints']}")
     return data
 
+def test_knowledge_kb_list():
+    """测试知识库列表 API"""
+    body = json.dumps({"username": "test_user", "password": "test123"}).encode()
+    req = urllib.request.Request(
+        f"{BASE_URL}/api/user/login/manual",
+        data=body,
+        headers={"Content-Type": "application/json"},
+    )
+    r = urllib.request.urlopen(req, timeout=10)
+    login_data = json.loads(r.read())
+    token = login_data["data"]["token"]
+
+    req2 = urllib.request.Request(
+        f"{BASE_URL}/api/knowledge/bases",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    r2 = urllib.request.urlopen(req2, timeout=10)
+    data = json.loads(r2.read())
+    assert data["success"] is True
+    print(f"✅ 知识库列表: {len(data['data'])} 个知识库")
+    for kb in data["data"]:
+        print(f"   📚 {kb['name']} ({kb['docCount']}文档, {kb['chunkCount']}分块)"
+              f"{' 🏛️系统' if kb['isSystem'] else ''}")
+    return data, token
+
+def test_knowledge_create_and_delete(token):
+    """测试创建和删除知识库"""
+    import urllib.error
+
+    # 创建
+    body = json.dumps({"name": "TDD测试知识库", "description": "临时测试用"}).encode()
+    req = urllib.request.Request(
+        f"{BASE_URL}/api/knowledge/base",
+        data=body,
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}"},
+        method="POST",
+    )
+    try:
+        r = urllib.request.urlopen(req, timeout=10)
+        data = json.loads(r.read())
+        assert "id" in data
+        kb_id = data["id"]
+        print(f"✅ 创建知识库成功: {kb_id}")
+
+        # 删除
+        del_req = urllib.request.Request(
+            f"{BASE_URL}/api/knowledge/base/{kb_id}",
+            headers={"Authorization": f"Bearer {token}"},
+            method="DELETE",
+        )
+        del_r = urllib.request.urlopen(del_req, timeout=10)
+        del_data = json.loads(del_r.read())
+        assert del_data["success"] is True
+        print(f"✅ 删除知识库成功")
+        return True
+    except urllib.error.HTTPError as e:
+        print(f"⚠️ 知识库 CRUD 跳过（需要数据库): {e.code} {e.read().decode()[:100]}")
+        return False
+
 def test_frontend():
     dist_path = r"D:\code\AIRUN\yuairun-frontend\dist"
     if os.path.exists(dist_path):
@@ -78,6 +137,10 @@ if __name__ == "__main__":
             user_answers[q["id"]] = "A" if i % 2 == 0 else q["answer"]
         
         test_analyze(questions, user_answers)
+
+        # 知识库验证
+        kb_data, token = test_knowledge_kb_list()
+        test_knowledge_create_and_delete(token)
         test_frontend()
         
         print()
