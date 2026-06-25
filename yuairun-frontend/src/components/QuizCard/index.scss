@@ -2,12 +2,15 @@
   margin-bottom: 16px;
 }
 
-.quiz-question-box {
+.quiz-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: #FBF9F7;
-  border-radius: 28px;
-  padding: 28px;
-  margin-bottom: 20px;
+  border-radius: 28px 28px 0 0;
+  padding: 20px 28px 4px;
   border: 2px solid #EDE4DE;
+  border-bottom: none;
 
   .q-tag {
     display: inline-block;
@@ -16,8 +19,34 @@
     color: #6E9B92;
     padding: 6px 24px;
     border-radius: 16px;
-    margin-bottom: 16px;
   }
+
+  .q-source-tag {
+    display: inline-block;
+    font-size: 20px;
+    padding: 4px 16px;
+    border-radius: 12px;
+    font-weight: 500;
+
+    &.ai {
+      background: #F0E6FF;
+      color: #8B6FC0;
+    }
+
+    &.kb {
+      background: #FFF3E0;
+      color: #C97B6B;
+    }
+  }
+}
+
+.quiz-question-box {
+  background: #FBF9F7;
+  border-radius: 0 0 28px 28px;
+  padding: 16px 28px 28px;
+  margin-bottom: 20px;
+  border: 2px solid #EDE4DE;
+  border-top: none;
 
   .q-text {
     font-size: 32px;

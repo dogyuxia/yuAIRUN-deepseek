@@ -15,6 +15,8 @@ from app.prompts.quiz_prompt import (
     QUIZ_HUMAN_PROMPT,
     SEARCH_QUIZ_SYSTEM_PROMPT,
     SEARCH_QUIZ_HUMAN_PROMPT,
+    AGENTIC_QUIZ_SYSTEM_PROMPT,
+    AGENTIC_QUIZ_HUMAN_PROMPT,
 )
 from app.utils.mock_llm import get_mock_quiz_response
 
@@ -95,6 +97,31 @@ def create_quiz_chain(use_mock: bool = False):
     ])
 
     return QuizChain(llm, prompt)
+
+
+def create_agentic_quiz_chain(
+    knowledge_base_id: str | None = None,
+    knowledge_base_name: str = "",
+):
+    """
+    创建 Agentic RAG 出题链
+
+    AI Agent 自主分析用户 topic 并决定检索策略：
+    - 有知识库时优先检索知识库，不充分则补充联网搜索
+    - 无知识库时直接联网搜索
+
+    Args:
+        knowledge_base_id: 知识库 ID（可选）
+        knowledge_base_name: 知识库名称（可选）
+
+    Returns:
+        AgenticQuizChain 实例
+    """
+    from app.chains.agentic_quiz_chain import AgenticQuizChain
+    return AgenticQuizChain(
+        knowledge_base_id=knowledge_base_id,
+        knowledge_base_name=knowledge_base_name,
+    )
 
 
 def create_search_augmented_quiz_chain():

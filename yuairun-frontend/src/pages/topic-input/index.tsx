@@ -8,7 +8,6 @@ import { generateQuiz } from '../../services/quiz'
 import LoadingSpinner from '../../components/LoadingSpinner/index'
 import KnowledgeBaseSelector from '../../components/KnowledgeBaseSelector/index'
 import { QUIZ_COUNT_OPTIONS, DIFFICULTY_OPTIONS } from '../../utils/constants'
-import type { SearchMode } from '../../types/knowledge'
 import './index.scss'
 
 export default function TopicInput() {
@@ -21,10 +20,9 @@ export default function TopicInput() {
   const [difficulty, setDifficulty] = useState('medium')
   const [isLoading, setIsLoading] = useState(false)
 
-  // 🆕 知识库相关状态
+  // 知识库相关状态（AI 自主决定检索策略）
   const [selectedKbId, setSelectedKbId] = useState<string | null>(null)
   const [selectedKbName, setSelectedKbName] = useState<string | null>(null)
-  const [searchMode, setSearchMode] = useState<SearchMode>('search')
 
   const handleGenerate = async () => {
     if (!topic.trim()) {
@@ -47,9 +45,9 @@ export default function TopicInput() {
         count,
         difficulty,
         type: 'single',
-        // 🆕 携带知识库参数
+        // AI 自主决定检索策略，只需提供知识库ID（可选）
         ...(selectedKbId ? { knowledgeBaseId: selectedKbId } : {}),
-        searchMode,
+        searchMode: 'agentic',
       })
 
       if (response.success && response.data) {
@@ -106,15 +104,13 @@ export default function TopicInput() {
         <View className='chip'>📄 上传文档</View>
       </View>
 
-      {/* 🆕 知识库选择器 */}
+      {/* 知识库选择器（AI 自主决定检索策略） */}
       <KnowledgeBaseSelector
         selectedKbId={selectedKbId}
-        searchMode={searchMode}
         onSelectKb={(id, name) => {
           setSelectedKbId(id)
           setSelectedKbName(name)
         }}
-        onSelectMode={setSearchMode}
       />
 
       {/* 管理知识库入口 */}
@@ -182,12 +178,10 @@ export default function TopicInput() {
         </View>
       </View>
 
-      {/* 当前搜索模式标签 */}
+      {/* 当前知识库标签（AI 自主决策，无需显示模式选择） */}
       {selectedKbId && (
         <View className='search-mode-tag'>
-          📚 {selectedKbName} ·{' '}
-          {searchMode === 'knowledge_base' ? '🔍 仅知识库' :
-           searchMode === 'search' ? '🕸️ 仅 AI 搜索' : '🔀 混合模式'}
+          📚 {selectedKbName} · 🤖 AI 自动决策
         </View>
       )}
 

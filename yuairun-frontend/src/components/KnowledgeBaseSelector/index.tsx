@@ -1,23 +1,19 @@
-/** 知识库选择器组件 */
+/** 知识库选择器组件 — 仅选择知识库，AI 自主决定检索方式 */
 import { View, Text } from '@tarojs/components'
 import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import { getKnowledgeBases } from '../../services/knowledge'
-import type { KnowledgeBase, SearchMode } from '../../types/knowledge'
+import type { KnowledgeBase } from '../../types/knowledge'
 import './index.scss'
 
 interface Props {
   selectedKbId: string | null
-  searchMode: SearchMode
   onSelectKb: (id: string | null, name: string | null) => void
-  onSelectMode: (mode: SearchMode) => void
 }
 
 export default function KnowledgeBaseSelector({
   selectedKbId,
-  searchMode,
   onSelectKb,
-  onSelectMode,
 }: Props) {
   const [bases, setBases] = useState<KnowledgeBase[]>([])
   const [expanded, setExpanded] = useState(false)
@@ -58,16 +54,10 @@ export default function KnowledgeBaseSelector({
   }
 
   const getCurrentLabel = () => {
-    if (!selectedKbId) return '🌐 AI 搜索出题（默认）'
+    if (!selectedKbId) return '🌐 AI 智能出题（默认）'
     const kb = bases.find((b) => b.id === selectedKbId)
-    return kb ? `📚 ${kb.name}` : '🌐 AI 搜索出题（默认）'
+    return kb ? `📚 ${kb.name}` : '🌐 AI 智能出题（默认）'
   }
-
-  const modeOptions: { value: SearchMode; label: string; icon: string; desc: string }[] = [
-    { value: 'knowledge_base', label: '仅知识库', icon: '🔍', desc: '只从知识库检索' },
-    { value: 'search', label: '仅 AI 搜索', icon: '🕸️', desc: '联网搜索最新资料' },
-    { value: 'hybrid', label: '混合模式', icon: '🔀', desc: '知识库 + 联网搜索' },
-  ]
 
   return (
     <View className='kb-selector'>
@@ -77,6 +67,9 @@ export default function KnowledgeBaseSelector({
           <Text className='kb-current'>{getCurrentLabel()}</Text>
           <Text className='kb-arrow'>{expanded ? '▲' : '▼'}</Text>
         </View>
+        {selectedKbId && (
+          <View className='kb-autobadge'>🤖 AI 自动决策</View>
+        )}
       </View>
 
       {/* 展开后的列表 */}
@@ -98,8 +91,8 @@ export default function KnowledgeBaseSelector({
               >
                 <Text className='kb-option-icon'>🌐</Text>
                 <View className='kb-option-info'>
-                  <Text className='kb-option-name'>AI 搜索出题</Text>
-                  <Text className='kb-option-desc'>联网搜索最新资料出题</Text>
+                  <Text className='kb-option-name'>AI 智能出题</Text>
+                  <Text className='kb-option-desc'>AI 会自动联网搜索最新资料出题</Text>
                 </View>
               </View>
 
@@ -122,28 +115,6 @@ export default function KnowledgeBaseSelector({
               ))}
             </>
           )}
-        </View>
-      )}
-
-      {/* 选择了知识库后，显示搜索模式选择 */}
-      {selectedKbId && (
-        <View className='mode-selector'>
-          <Text className='mode-label'>🎯 搜索模式</Text>
-          <View className='mode-options'>
-            {modeOptions.map((opt) => (
-              <View
-                key={opt.value}
-                className={`mode-chip ${searchMode === opt.value ? 'active' : ''}`}
-                onClick={() => onSelectMode(opt.value)}
-              >
-                <Text className='mode-icon'>{opt.icon}</Text>
-                <Text className='mode-text'>{opt.label}</Text>
-              </View>
-            ))}
-          </View>
-          <Text className='mode-desc'>
-            {modeOptions.find((m) => m.value === searchMode)?.desc}
-          </Text>
         </View>
       )}
     </View>

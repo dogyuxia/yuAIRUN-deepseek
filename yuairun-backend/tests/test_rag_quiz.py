@@ -28,14 +28,14 @@ class TestQuizMetadataFields:
     """测试 QuizMetadata 新增的 RAG 相关字段"""
 
     def test_metadata_default_search_mode(self):
-        """默认 searchMode 应为 search"""
+        """默认 searchMode 应为 agentic"""
         metadata = QuizMetadata(
             subject="测试",
             topic="测试",
             generatedAt="2026-01-01T00:00:00Z",
             model="deepseek-chat",
         )
-        assert metadata.searchMode == "search"
+        assert metadata.searchMode == "agentic"
         assert metadata.searchEnhanced is False
         assert metadata.knowledgeBaseId is None
         assert metadata.knowledgeBaseName is None
@@ -153,7 +153,7 @@ class TestGenerateQuizRequestFields:
             topic="测试主题",
         )
         assert req.knowledgeBaseId is None
-        assert req.searchMode == "search"
+        assert req.searchMode == "agentic"
 
     def test_knowledge_base_request(self):
         """知识库模式请求"""
@@ -182,16 +182,14 @@ class TestGenerateQuizRequestFields:
         )
         assert req.searchMode == "hybrid"
 
-    def test_invalid_search_mode(self):
-        """无效 searchMode 应校验失败"""
-        from pydantic import ValidationError
-
-        with pytest.raises(ValidationError):
-            GenerateQuizRequest(
-                subject="测试",
-                topic="测试",
-                searchMode="invalid",
-            )
+    def test_any_search_mode_accepted(self):
+        """searchMode 改为 str 后，任何值都应被接受（向后兼容）"""
+        req = GenerateQuizRequest(
+            subject="测试",
+            topic="测试",
+            searchMode="invalid",
+        )
+        assert req.searchMode == "invalid"
 
 
 # ============================================================

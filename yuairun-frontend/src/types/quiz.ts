@@ -13,7 +13,21 @@ export interface QuizOption {
 }
 
 /** 知识来源类型 */
-export type KnowledgeSource = 'web_search' | 'model_knowledge'
+export type KnowledgeSource = 'web_search' | 'model_knowledge' | 'knowledge_base'
+
+/** 知识来源对应的展示标签 */
+export const KNOWLEDGE_SOURCE_LABELS: Record<KnowledgeSource, { label: string; icon: string }> = {
+  web_search: { label: 'AI 出题', icon: '🤖' },
+  model_knowledge: { label: 'AI 出题', icon: '🤖' },
+  knowledge_base: { label: '知识库题目', icon: '📚' },
+}
+
+/** 根据 knowledgeSource 获取展示标签 */
+export function getKnowledgeSourceLabel(source?: KnowledgeSource): string {
+  if (!source) return '🤖 AI 出题'
+  const info = KNOWLEDGE_SOURCE_LABELS[source]
+  return info ? `${info.icon} ${info.label}` : '🤖 AI 出题'
+}
 
 /** 单道题目 */
 export interface QuizQuestion {
@@ -25,7 +39,7 @@ export interface QuizQuestion {
   explanation: string
   difficulty: Difficulty
   knowledgePoint: string
-  /** 知识来源: web_search=基于搜索结果, model_knowledge=基于模型知识 */
+  /** 知识来源: web_search=基于搜索结果, model_knowledge=基于模型知识, knowledge_base=基于知识库 */
   knowledgeSource?: KnowledgeSource
 }
 

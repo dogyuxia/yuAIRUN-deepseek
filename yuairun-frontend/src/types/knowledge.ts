@@ -60,5 +60,10 @@ export interface DeleteResponse {
   error?: string
 }
 
-/** 搜索模式 */
-export type SearchMode = 'search' | 'knowledge_base' | 'hybrid'
+/** 
+ * 搜索模式（已废弃）
+ * @deprecated AI 现已自主决定检索策略，无需手动选择模式。
+ * 请使用 searchMode: 'agentic'（默认值）。
+ * 旧值 'search' | 'knowledge_base' | 'hybrid' 仍被后端接受但不再用于路由。
+ */
+export type SearchMode = 'search' | 'knowledge_base' | 'hybrid' | 'agentic'

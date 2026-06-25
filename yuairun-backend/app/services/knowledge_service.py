@@ -127,7 +127,6 @@ async def delete_knowledge_base(kb_id: str, user_id: str) -> tuple[bool, Optiona
 
 async def _index_system_markdown_files():
     """读取并索引 knowledge_base/default/ 下的所有 markdown 文件到系统知识库"""
-    import os
     # 计算项目根目录 (yuairun-backend/)
     backend_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     kb_base_dir = os.path.join(backend_root, "knowledge_base", "default")
@@ -137,48 +136,25 @@ async def _index_system_markdown_files():
         return
 
     async with get_session() as session:
-        # 检查是否已有文档索引（只跳过完全索引的情况）
-        count_stmt = select(KnowledgeDocumentModel).where(
+        # 检查是否已有文档索引
+        stmt = select(KnowledgeDocumentModel).where(
             KnowledgeDocumentModel.kb_id == SYSTEM_KB_ID,
             KnowledgeDocumentModel.user_id == SYSTEM_USER_ID,
-        )
-        count_result = await session.execute(count_stmt)
-        existing_docs = count_result.scalars().all()
-        
-        # 计算实际有多少个 md 文件
-        total_files = 0
-        for r, dirs, files in os.walk(kb_base_dir):
-            for f in files:
-                if f.endswith((".md", ".txt")):
-                    total_files += 1
-        
-        if len(existing_docs) >= total_files:
-            logger.info("系统知识包文档已完整索引 (%d/%d)，跳过", len(existing_docs), total_files)
+        ).limit(1)
+        existing = await session.execute(stmt)
+        if existing.scalar_one_or_none():
+            logger.info("系统知识包文档已索引，跳过")
             return
-        elif existing_docs:
-            logger.info("系统知识包索引不完整 (%d/%d)，重新索引", len(existing_docs), total_files)
-            # 删除旧文档和向量
-            for old_doc in existing_docs:
-                from app.services.vector_service import delete_document_chunks
-                await delete_document_chunks(old_doc.id)
-                await session.delete(old_doc)
-            # 重置知识库统计
-            kb_stmt = select(KnowledgeBaseModel).where(KnowledgeBaseModel.id == SYSTEM_KB_ID)
-            kb_result = await session.execute(kb_stmt)
-            kb = kb_result.scalar_one_or_none()
-            if kb:
-                kb.doc_count = 0
-                kb.chunk_count = 0
-            await session.commit()
 
-    # 快速检查 BGE-M3 模型文件是否已缓存（避免触发模型下载阻塞事件循环）
-    model_cache_dir = os.path.join(get_settings().embedding_cache_dir, "models--BAAI--bge-m3")
-    has_model_files = os.path.isdir(model_cache_dir) and any(
-        f.endswith(".safetensors") or f.endswith(".bin")
-        for _, _, files in os.walk(model_cache_dir) for f in files
-    )
-    if not has_model_files:
-        logger.info("⏳ BGE-M3 模型尚未下载，跳过系统知识包向量索引（后台会自动尝试）")
+    # 检查 ChromaDB 是否可用（无需 BGE-M3 模型，原生 ChromaDB 使用内置 embedding）
+    try:
+        from app.services.vector_service import get_collection
+        collection = get_collection()
+        if collection is None:
+            logger.warning("⚠️ ChromaDB 不可用，跳过系统知识包索引")
+            return
+    except Exception:
+        logger.warning("⚠️ ChromaDB 未就绪，跳过系统知识包索引")
         return
 
     total_docs = 0
@@ -315,4 +291,5 @@ async def seed_system_knowledge_bases():
         else:
             logger.info("系统知识库已存在，继续索引文档...")
 
-    # 系统知识包文件由后台任务自动索引（见 main.py），此处不再阻塞调用
+    # 索引系统知识包文件（每次都尝试，因为可能有新文件）
+    await _index_system_markdown_files()

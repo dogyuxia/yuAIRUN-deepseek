@@ -52,9 +52,9 @@ class QuizMetadata(BaseModel):
     )
     # 🆕 RAG 知识库：搜索模式
     searchMode: str = Field(
-        default="search",
+        default="agentic",
         validation_alias="searchMode",
-        description="搜索模式: search/knowledge_base/hybrid",
+        description="搜索模式: agentic=AI自主判断, search/knowledge_base/hybrid（旧模式）",
     )
     # 🆕 RAG 知识库：使用的知识库ID
     knowledgeBaseId: str | None = Field(
@@ -67,6 +67,24 @@ class QuizMetadata(BaseModel):
         default=None,
         validation_alias="knowledgeBaseName",
         description="使用的知识库名称",
+    )
+    # 🆕 Agentic RAG：使用的检索策略描述
+    retrievalStrategy: str | None = Field(
+        default=None,
+        validation_alias="retrievalStrategy",
+        description="使用的检索策略描述，如 'kb_only', 'web_only', 'kb_then_web'",
+    )
+    # 🆕 Agentic RAG：实际调用的工具名称列表
+    toolsInvoked: list[str] = Field(
+        default=[],
+        validation_alias="toolsInvoked",
+        description="实际调用的工具名称列表",
+    )
+    # 🆕 Agentic RAG：是否触发了降级
+    fallback: bool = Field(
+        default=False,
+        validation_alias="fallback",
+        description="是否触发了降级（Agent 失败回退到传统链）",
     )
 
 
@@ -92,9 +110,10 @@ class GenerateQuizRequest(BaseModel):
         default=None,
         description="知识库ID，指定后从该知识库检索资料出题",
     )
-    searchMode: Literal["search", "knowledge_base", "hybrid"] = Field(
-        default="search",
-        description="搜索模式: search=AI搜索, knowledge_base=仅知识库, hybrid=混合",
+    # 搜索模式（保留向后兼容，但不再用于路由判断，默认使用 AI 自主决策）
+    searchMode: str = Field(
+        default="agentic",
+        description="搜索模式: agentic=AI自主判断（默认）, 旧值 search/knowledge_base/hybrid 仍被接受但忽略",
     )
 
 

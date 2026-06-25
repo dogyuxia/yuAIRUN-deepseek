@@ -9,8 +9,7 @@ from app.models.quiz import (
     GenerateQuizResponse,
     QuizResponse,
 )
-from app.chains.quiz_chain import create_quiz_chain, create_search_augmented_quiz_chain
-from app.chains.rag_quiz_chain import RAGQuizChain
+from app.chains.quiz_chain import create_quiz_chain, create_agentic_quiz_chain
 from app.db.session import DbSession
 from app.db.models.knowledge_base import KnowledgeBaseModel
 from sqlalchemy import select
@@ -35,10 +34,10 @@ async def generate_quiz(request: GenerateQuizRequest) -> GenerateQuizResponse:
     """
     根据用户输入生成题目
 
-    根据 searchMode 路由到不同出题链：
-    - "search" → Tavily 搜索增强出题链（默认）
-    - "knowledge_base" → ChromaDB RAG 出题链
-    - "hybrid" → 知识库 + 网络搜索混合出题链
+    使用 Agentic RAG 出题链，AI 自主判断检索策略：
+    - 有知识库时优先检索知识库，不充分则补充联网搜索
+    - 无知识库时直接联网搜索
+    - 全部失败则使用模型知识降级
 
     Args:
         request: 出题请求参数
@@ -72,59 +71,25 @@ async def generate_quiz(request: GenerateQuizRequest) -> GenerateQuizResponse:
             result: QuizResponse = await chain.ainvoke(chain_inputs)
             result.metadata.searchEnhanced = False
             result.metadata.searchSources = []
-            result.metadata.searchMode = request.searchMode
+            result.metadata.searchMode = "agentic"
         else:
-            if request.searchMode == "knowledge_base" and request.knowledgeBaseId:
-                # RAG 知识库出题
+            # 统一使用 Agentic RAG 出题链
+            kb_name = ""
+            if request.knowledgeBaseId:
                 kb_name = await _lookup_kb_name(request.knowledgeBaseId)
-                chain = RAGQuizChain(
-                    kb_id=request.knowledgeBaseId,
-                    kb_name=kb_name,
+
+            chain = create_agentic_quiz_chain(
+                knowledge_base_id=request.knowledgeBaseId,
+                knowledge_base_name=kb_name,
+            )
+            result: QuizResponse = await chain.ainvoke(chain_inputs)
+
+            # 如果无题目（Agent 返回空），返回明确提示
+            if not result.questions:
+                return GenerateQuizResponse(
+                    success=False,
+                    error="没有生成任何题目，请尝试修改知识点描述或更换出题方式",
                 )
-                result = await chain.ainvoke(chain_inputs)
-                
-                # 如果 RAG 检索无结果，返回明确提示
-                if not result.questions:
-                    return GenerateQuizResponse(
-                        success=False,
-                        error="知识库中没有足够的相关内容，请尝试其他知识库或使用 AI 搜索模式",
-                    )
-                    
-            elif request.searchMode == "hybrid" and request.knowledgeBaseId:
-                # 混合模式：知识库 + 网络搜索（先用 RAG 再走搜索）
-                kb_name = await _lookup_kb_name(request.knowledgeBaseId)
-                rag_chain = RAGQuizChain(
-                    kb_id=request.knowledgeBaseId,
-                    kb_name=kb_name,
-                )
-                rag_result = await rag_chain.ainvoke(chain_inputs)
-                
-                # 补充网络搜索
-                search_chain = create_search_augmented_quiz_chain()
-                search_result = await search_chain.ainvoke(chain_inputs)
-                
-                # 合并两套题目（去重后取高质量）
-                all_questions = []
-                seen = set()
-                for q in (rag_result.questions or []) + (search_result.questions or []):
-                    if q.question not in seen:
-                        seen.add(q.question)
-                        all_questions.append(q)
-                
-                # 使用 RAG 结果的 metadata
-                result = rag_result
-                result.questions = all_questions[:request.count]
-                result.metadata.searchMode = "hybrid"
-                if rag_result.metadata and search_result.metadata:
-                    result.metadata.searchSources = (
-                        (rag_result.metadata.searchSources or []) +
-                        (search_result.metadata.searchSources or [])
-                    )
-            else:
-                # 默认：搜索增强出题
-                chain = create_search_augmented_quiz_chain()
-                result: QuizResponse = await chain.ainvoke(chain_inputs)
-                result.metadata.searchMode = request.searchMode
 
         # 补充前端需要的字段
         for i, q in enumerate(result.questions, 1):

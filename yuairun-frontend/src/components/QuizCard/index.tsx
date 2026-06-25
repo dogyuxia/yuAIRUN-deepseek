@@ -2,6 +2,7 @@
 import { View, Text } from '@tarojs/components'
 import OptionItem from '../OptionItem/index'
 import type { QuizQuestion } from '../../types/quiz'
+import { getKnowledgeSourceLabel } from '../../types/quiz'
 import './index.scss'
 
 interface QuizCardProps {
@@ -62,11 +63,19 @@ export default function QuizCard({ question, userAnswer, showResult = false, onS
     }
   }
 
+  const sourceTag = getKnowledgeSourceLabel(q.knowledgeSource)
+
   return (
     <View className='quiz-card'>
+      {/* 题目头部：题目标签 + 来源标签 */}
+      <View className='quiz-card-header'>
+        <Text className='q-tag'>{TYPE_LABELS[q.type] || '📌 题目'}</Text>
+        <Text className={`q-source-tag ${q.knowledgeSource === 'knowledge_base' ? 'kb' : 'ai'}`}>
+          {sourceTag}
+        </Text>
+      </View>
       {/* 题目 */}
       <View className='quiz-question-box'>
-        <Text className='q-tag'>{TYPE_LABELS[q.type] || '📌 题目'}</Text>
         <Text className='q-text'>{q.question}</Text>
       </View>
 
