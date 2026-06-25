@@ -53,7 +53,8 @@ export async function getKbDocuments(
 /** 上传文档到知识库 */
 export async function uploadDocument(
   kbId: string,
-  filePath: string
+  filePath: string,
+  originalName?: string,
 ): Promise<DocumentUploadResponse> {
   const token = getStorageData<string | null>(STORAGE_KEYS.TOKEN, null)
   const header: Record<string, string> = {}
@@ -62,10 +63,15 @@ export async function uploadDocument(
   }
 
   try {
+    const formData: Record<string, any> = {}
+    if (originalName) {
+      formData.filename = originalName
+    }
     const response = await Taro.uploadFile({
       url: `${API_BASE_URL}/api/knowledge/base/${kbId}/documents`,
       filePath,
       name: 'file',
+      formData,
       header,
     })
     return JSON.parse(response.data) as DocumentUploadResponse

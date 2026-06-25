@@ -51,7 +51,7 @@ export default function KnowledgeDetailPage() {
         }
 
         setUploading(true)
-        const result = await uploadDocument(kbId, file.path)
+        const result = await uploadDocument(kbId, file.path, file.name || file.path)
         if (result.success) {
           Taro.showToast({ title: '上传成功，正在处理', icon: 'success' })
           loadDocuments()

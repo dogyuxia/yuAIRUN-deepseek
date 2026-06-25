@@ -32,11 +32,15 @@ MAX_FILE_SIZE = 20 * 1024 * 1024  # 20MB
 async def upload_doc(
     kb_id: str,
     file: UploadFile,
+    filename: str = Form(None),
     user_id: str = Depends(get_current_user_id),
 ):
     """上传文档到知识库"""
+    # 使用前端传来的原始文件名（避免 WeChat 临时路径乱码）
+    original_filename = filename or file.filename or "unnamed"
+    
     # 校验文件类型
-    ext = os.path.splitext(file.filename or "")[1].lower()
+    ext = os.path.splitext(original_filename)[1].lower()
     if ext not in ALLOWED_EXTENSIONS:
         return DocumentUploadResponse(
             success=False,
@@ -54,7 +58,7 @@ async def upload_doc(
     doc_id = await upload_document(
         user_id=user_id,
         kb_id=kb_id,
-        filename=file.filename or "unnamed",
+        filename=original_filename,
         file_content=content,
     )
     
